@@ -68,4 +68,4 @@ def about(request):
 
 def redirect_home(request):
     print("-- Called redirect Home--")
-    return redirect('staff:login')
+    return redirect('staff:writers')

@@ -45,13 +45,25 @@ def writers(request):
             'author' : 'Chinua Achebbe', 
              'title' : "Things fall apart"},
 
-        {   ' id' : 2,
+        {   'id' : 2,
             'author' : 'Paulo Cuelho' ,
-            ' title' : "The Alchemist"},
+            'title' : "The Alchemist"},
 
         {'id': 3,
          'author': 'Robin Sharma',
-         ' title': "The Monk who Sold his Ferrari"},
+         'title': "The Monk who Sold his Ferrari"},
+         
+         {'id': 4,
+         'author': 'Robert Green',
+         'title': "Power"},
+
+         {'id': 5,
+         'author': 'Robert Kiwosaki',
+         'title': "Rich Dad Poo Dad"},
+
+         {'id': 6,
+         'author': 'Ben Carson',
+         'title': "Think Big"},
         
     ]
 

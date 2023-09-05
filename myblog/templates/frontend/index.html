@@ -1,3 +1,4 @@
+{% load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,17 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/f_style.css' %}">
 </head>
-<body>
+<body >
     <a href ="{% url 'frontend:about'%}">about</a>
+    <a href ="{% url 'staff:writers'%}">writers</a>
+    <a href ="{% url 'writers:login'%}">login</a>
+    
+    <img src="{% static 'images/images2.jpg' %}">
     <h1> Home to {{name}}</h1>
     <p>
         <h2>{{names_list}}</h2>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab minus praesentium magnam, illo perspiciatis veritatis facilis itaque aliquam
-        <h3>{{paragraph}}</h3> tenetur delectus necessitatibus fuga, officia, sequi veniam quam fugit reprehenderit sint et. Incidunt voluptates repellendus fugit alias accusantium repellat qui quo iste!
+         tenetur delectus necessitatibus fuga, officia, sequi veniam quam fugit reprehenderit sint et. Incidunt voluptates
+          repellendus fugit alias accusantium repellat qui quo iste!
+
         {% for nm in names_list %}
             <h2>{{ nm }}</h2>
         {% endfor %}
+          <h3>{{paragraph}}</h3>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo soluta tempora in mollitia impedit deleniti reiciendis nesciunt architecto earum error assumenda modi id vel dolor nisi et autem dolore voluptas illum nulla eum repudiandae, sed ab excepturi! Consectetur, doloremque sed debitis vero incidunt voluptatem, quod aliquid facere aspernatur architecto quam.
+        
     </p>
     
 </body>
