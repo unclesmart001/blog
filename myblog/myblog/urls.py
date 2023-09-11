@@ -27,6 +27,9 @@ urlpatterns = [
     path("", include("frontend.urls")),
     path("writers/", include("writers.urls")),
     path("staff/", include("staff.urls")),
+    path("articles/", include("articles.urls")),
+    path("authenticate/", include("authenticate.urls")),
+
     
 ]
 if settings.DEBUG:

@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title%} {%endblock%} </title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block style %} {% endblock %}
+</head>
+<body>
+{% include "components/navbar.html" %}
+
+    <!--
+TEMPLATE INHERITANCE
+-Removes boilerlate code -  this contains all the repetitive code , which other html files will require
+
+TYPES OF BLOCKS
+1. Content block - This block will contain the body code, for the different pages inheriting the base.html files
+2. Style block - Contains the extra styling that will be needed by the different pages inheriting  fro base.htl
+3.Script block - JS files for different pages inheriting fro base.html
+4. Title block - contains a slot for the title of each page inheriting fro base.html
+    -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    {% block content %} {% endblock %}
+
+    {% block scripts %} {% endblock %}
+</body>
+</html>

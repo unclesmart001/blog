@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'frontend',
     'writers',
     'staff',
+    'articles',
+    'authenticate',
 ]
 
 MIDDLEWARE = [
