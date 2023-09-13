@@ -5,7 +5,7 @@ from django.db.models.options import Options
 
 class ReaderProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    #profile_image = models.ImageField(upload_to="/reader/photos", null=True)
+    profile_image = models.ImageField(upload_to="reader/photos", null=True)
 
     def __str__(self):
         return self.user.username

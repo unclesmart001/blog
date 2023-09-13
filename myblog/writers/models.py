@@ -6,7 +6,7 @@ class WriterProfile(models.Model):
     education = models.TextField(null=True)
     about = models.TextField()
     cv = models.FileField(upload_to="writers/cv")
-    #profile_photo = models.ImageField(upload_to="writers/profile")
+    profile_photo = models.ImageField(upload_to="writers/profile")
 
     def __str__(self) -> str:
         return self.user.username

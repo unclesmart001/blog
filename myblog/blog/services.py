@@ -1,10 +1,11 @@
+from . import selectors
 from blog.models import Category, Blog, Comment
 from writers.models import WriterProfile
-from blog import selectors
+
 
 
 """
-Database changes operations i.e: create, Update, Delete
+Database changes operations i.e: create, Update, Delete / manipulating the table in the database
 """
 def create_category(input_name:str, input_description:str):
     try:
@@ -55,7 +56,17 @@ def update_blog(blog_id: int, update: dict)->Blog:
     except Exception as e:
         raise str(e)
 
-'''TODO:
-deletion
-soft deletion
-'''
+def delete_category(categories_id: int):
+    category_instance = selectors.get_specific_category(categories_id)
+    category_instance.delete()
+
+def delete_blog(blog_id: int):
+    blog_instance = selectors.get_specific_blog(blog_id)
+    blog_instance.delete()
+
+    '''
+    TODO
+    1. create an enviroment
+    2. django model forms
+    
+    '''

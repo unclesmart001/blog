@@ -32,12 +32,12 @@ def get_categories(filter=None):
 
 def get_specific_category(id:int) -> Category: 
     '''
-    Returns an existing with the same ID
+    Returns an existing categery with the same ID
     '''
     category = Category.objects.get(pk=id)
     return category
      
-def get_blog(filter = none):
+def get_blog(filter = None):
   if not filter:
     return Blog.objects.all()
   
