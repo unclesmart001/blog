@@ -56,6 +56,89 @@ def get_user_comments(user_id:int):
     )
     return sp_comments
     
+'''
+creating Read queries in django
+-we use queries to obtain data from our database. This data can be in form of a QuerySet or a QueryDict.
+
+A queryset is a list of data items retrieved from our database, under a particular model.
+A querydict is a specific object retrieved from our database under  a particular model.
+
+How to get a QueryDict(a model object)
+Syntax: Model.objects.get(unique_field=unique_value)
+
+-With the .get() we are able to retrieve a single  instance from a model; However if more than value is found ,this raises an error. also if the field value does not exist fo any instance in our model we will get an ObjectDoesNotExist exception.
+Example: Blog.objects.get(id=1)
+
+How to get QuerySet
+We get a queryset either when retrieving all data or specific data.
+
+Retrieving all data
+Syntax: Model.objects.all()
+E.G Blog.objects.all()
+
+Retrieving data by filtering 
+Syntax: Model.objects.filter(field1=value1, field2=value2)
+EG: Blog.objects.filter(title="sth")
+
+Advanced filtering
+1. lesser than(__lt), greater than(__gt), greater or equal to(__gte), less or equal to(__lte)
+-Their main use case is in:
+  a. Getting a duration eg between the beginning of the month to today in a system. e.g getting Blogs written in btw a specific timeframe
+  b. Getting an age bracket in a system: e.g getting movies for teens or adult in a site like netflix
+  c. Gettting a price range e.g in an ecommerce system
+
+  They therefore work with date fields or number fields(float/decimals/int/double)
+  How to use them in Django:
+  Syntax: Model.objects.filter(field__lte=value)
+  Example: Filtering Blogs written btw start of this sept and yesterday
+
+  Import datetime
+  yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+  start_of_sep = datetime.now().replace(day=1, month=8)
+
+  blogs = Blog.objects.filter(
+                 created_at__lte=yesterday,
+                created_at__gte=start_of_sep
+            )
+
+2. String contains (__icontains), string is exactly (__iexact), String starts with (__startwith), String ends with (__endswith)
+
+- This is used on string fields. We mainly use it for search, in a particular fields. I.e: We can check for a blog whose title starts with a particular set of character.
+
+blogs = Blog.objects.filter(title__startswith="sth")
+
+>> __icontains: Checks if the string contains the privided string.
+>> __iexact: Checks if the string is exactly equal to the privided string.
+>> __iendswith: Checks if the string ends with the provided string.
+
+-Mainly used in searches in different types of websites e.g Blog search, Movie search, Product search
+
+3. Items in queyset/list(__in): The input of this is a list or a queryset. It is used to check if a field value is in a list.
+E.g User.objects.filter(role__in=[RoleType.ADMIN, RoleType.SUPERUSER])
+The query above is used to check if a use's role is either an adin or a superuser(NB: There is an abstraction of the Roletype code), then we can use this info to determine the logic that comes afterwards
+
+use cases
+>>The one illustrated above
+TODO: look at other usecases
+
+4. Working with foreign fields (TODO: look at how to work with foreign fields in Django )
+
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 '''
 Elitebook@DESKTOP-PFSQFAA MINGW32 ~/OneDrive/Desktop/Django course/BackEnd/learning_django
@@ -89,489 +172,3 @@ Building wheels for collected packages: pillow
          https://pillow.readthedocs.io/en/latest/installation.html
 
 '''
-'''
-Elitebook@DESKTOP-PFSQFAA MINGW32 ~/OneDrive/Desktop/Django course/BackEnd/learning_django
-$ source blogenv/Scripts/activate
-(blogenv) 
-Elitebook@DESKTOP-PFSQFAA MINGW32 ~/OneDrive/Desktop/Django course/BackEnd/learning_django
-$ pip install pillow
-Collecting pillow
-  Using cached Pillow-10.0.0.tar.gz (50.5 MB)
-  Installing build dependencies ... done
-  Getting requirements to build wheel ... done
-  Preparing metadata (pyproject.toml) ... done
-Building wheels for collected packages: pillow
-  Building wheel for pillow (pyproject.toml) ... error
-  error: subprocess-exited-with-error
-  
-  × Building wheel for pillow (pyproject.toml) did not run successfully.
-  │ exit code: 1
-  ╰─> [205 lines of output]
-      running bdist_wheel
-      running build
-      running build_py
-      creating build
-      creating build\lib.win32-cpython-311
-      creating build\lib.win32-cpython-311\PIL
-      copying src\PIL\BdfFontFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\BlpImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\BmpImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\BufrStubImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ContainerIO.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\CurImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\DcxImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\DdsImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\EpsImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ExifTags.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\features.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\FitsImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\FliImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\FontFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\FpxImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\FtexImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GbrImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GdImageFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GifImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GimpGradientFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GimpPaletteFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GribStubImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\Hdf5StubImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\IcnsImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\IcoImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\Image.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageChops.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageCms.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageColor.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageDraw.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageDraw2.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageEnhance.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageFilter.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageFont.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageGrab.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageMath.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageMode.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageMorph.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageOps.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImagePalette.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImagePath.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageQt.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageSequence.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageShow.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageStat.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageTk.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageTransform.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageWin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImtImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\IptcImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\Jpeg2KImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\JpegImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\JpegPresets.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\McIdasImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\MicImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\MpegImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\MpoImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\MspImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PaletteFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PalmImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PcdImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PcfFontFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PcxImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PdfImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PdfParser.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PixarImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PngImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PpmImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PsdImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PSDraw.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PyAccess.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\QoiImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\SgiImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\SpiderImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\SunImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\TarIO.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\TgaImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\TiffImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\TiffTags.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\WalImageFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\WebPImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\WmfImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\XbmImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\XpmImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\XVThumbImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\_binary.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\_deprecate.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\_tkinter_finder.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\_util.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\_version.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\__init__.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\__main__.py -> build\lib.win32-cpython-311\PIL
-      running egg_info
-      writing src\Pillow.egg-info\PKG-INFO
-      writing dependency_links to src\Pillow.egg-info\dependency_links.txt
-      writing requirements to src\Pillow.egg-info\requires.txt
-      writing top-level names to src\Pillow.egg-info\top_level.txt
-      reading manifest file 'src\Pillow.egg-info\SOURCES.txt'
-      reading manifest template 'MANIFEST.in'
-      warning: no files found matching '*.c'
-      warning: no files found matching '*.h'
-      warning: no files found matching '*.sh'
-      warning: no files found matching '*.txt'
-      warning: no previously-included files found matching '.appveyor.yml'
-      warning: no previously-included files found matching '.clang-format'
-      warning: no previously-included files found matching '.coveragerc'
-      warning: no previously-included files found matching '.editorconfig'
-      warning: no previously-included files found matching '.readthedocs.yml'
-      warning: no previously-included files found matching 'codecov.yml'
-      warning: no previously-included files found matching 'renovate.json'
-      warning: no previously-included files matching '.git*' found anywhere in distribution
-      warning: no previously-included files matching '*.so' found anywhere in distribution
-      no previously-included directories found matching '.ci'
-      adding license file 'LICENSE'
-      writing manifest file 'src\Pillow.egg-info\SOURCES.txt'
-      running build_ext
-     
-     
-      The headers or library files could not be found for zlib,
-      a required dependency when compiling Pillow from source.
-      
-      Please see the install instructions at:
-         https://pillow.readthedocs.io/en/latest/installation.html
-     
-      Traceback (most recent call last):
-        File "<string>", line 988, in <module>
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\__init__.py", line 103, in setup
-          return distutils.core.setup(**attrs)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\_distutils\core.py", line 185, in setup       
-          return run_commands(dist)
-                 ^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\_distutils\core.py", line 201, in run_commands          dist.run_commands()
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 969, in run_commands          self.run_command(cmd)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\dist.py", line 1001, in run_command
-          super().run_command(command)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 988, in run_command 
-          cmd_obj.run()
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\wheel\bdist_wheel.py", line 364, in run
-          self.run_command("build")
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\_distutils\cmd.py", line 318, in run_command
-          self.distribution.run_command(command)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\dist.py", line 1001, in run_command
-          super().run_command(command)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 988, in run_command 
-          cmd_obj.run()
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\_distutils\command\build.py", line 131, in run          self.run_command(cmd_name)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\_distutils\cmd.py", line 318, in run_command  
-          self.distribution.run_command(command)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\dist.py", line 1001, in run_command
-          super().run_command(command)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 988, in run_command 
-          cmd_obj.run()
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\command\build_ext.py", line 88, in run        
-          _build_ext.run(self)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\_distutils\command\build_ext.py", line 345, in run
-          self.build_extensions()
-        File "<string>", line 811, in build_extensions
-      RequiredDependencyException: zlib
-     
-      During handling of the above exception, another exception occurred:
-     
-      Traceback (most recent call last):
-        File "C:\Users\Elitebook\OneDrive\Desktop\Django course\BackEnd\learning_django\blogenv\Lib\site-packages\pip\_vendor\pep517\in_process\_in_process.py", line 351, in <module>
-          main()
-        File "C:\Users\Elitebook\OneDrive\Desktop\Django course\BackEnd\learning_django\blogenv\Lib\site-packages\pip\_vendor\pep517\in_process\_in_process.py", line 333, in main
-          json_out['return_val'] = hook(**hook_input['kwargs'])
-                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\OneDrive\Desktop\Django course\BackEnd\learning_django\blogenv\Lib\site-packages\pip\_vendor\pep517\in_process\_in_process.py", line 249, in build_wheel
-          return _build_backend().build_wheel(wheel_directory, config_settings,
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-install-ia0srdkn\pillow_32ac6acccbda4496a48e9076d7ec61fe\_custom_build\backend.py", line 53, in build_wheel
-          return super().build_wheel(wheel_directory, config_settings, metadata_directory)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\build_meta.py", line 434, in build_wheel      
-          return self._build_with_temp_dir(
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\build_meta.py", line 419, in _build_with_temp_dir
-          self.run_setup()
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-install-ia0srdkn\pillow_32ac6acccbda4496a48e9076d7ec61fe\_custom_build\backend.py", line 47, in run_setup
-          return super().run_setup(setup_script)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ht6xlcnq\overlay\Lib\site-packages\setuptools\build_meta.py", line 341, in run_setup
-          exec(code, locals())
-        File "<string>", line 1005, in <module>
-      RequiredDependencyException:
-     
-      The headers or library files could not be found for zlib,
-      a required dependency when compiling Pillow from source.
-     
-      Please see the install instructions at:
-         https://pillow.readthedocs.io/en/latest/installation.html
-     
-     
-      [end of output]
-
-  note: This error originates from a subprocess, and is likely not a problem with pip.
-  ERROR: Failed building wheel for pillow
-Failed to build pillow
-ERROR: Could not build wheels for pillow, which is required to install pyproject.toml-based projects
-
-[notice] A new release of pip available: 22.3.1 -> 23.2.1
-[notice] To update, run: python.exe -m pip install --upgrade pip
-(blogenv) 
-Elitebook@DESKTOP-PFSQFAA MINGW32 ~/OneDrive/Desktop/Django course/BackEnd/learning_django
-$ pip uninstall wheel
-Found existing installation: wheel 0.41.2
-Uninstalling wheel-0.41.2:
-  Would remove:
-    c:\users\elitebook\onedrive\desktop\django course\backend\learning_django\blogenv\lib\site-packages\wheel-0.41.2.dist-info\*
-    c:\users\elitebook\onedrive\desktop\django course\backend\learning_django\blogenv\lib\site-packages\wheel\*
-    c:\users\elitebook\onedrive\desktop\django course\backend\learning_django\blogenv\scripts\wheel.exe
-Proceed (Y/n)? y
-  Successfully uninstalled wheel-0.41.2
-(blogenv) 
-Elitebook@DESKTOP-PFSQFAA MINGW32 ~/OneDrive/Desktop/Django course/BackEnd/learning_django
-$ pip install wheel
-Collecting wheel
-  Using cached wheel-0.41.2-py3-none-any.whl (64 kB)
-Installing collected packages: wheel
-Successfully installed wheel-0.41.2
-
-[notice] A new release of pip available: 22.3.1 -> 23.2.1
-[notice] To update, run: python.exe -m pip install --upgrade pip
-(blogenv) 
-Elitebook@DESKTOP-PFSQFAA MINGW32 ~/OneDrive/Desktop/Django course/BackEnd/learning_django
-$ pip uninstall pillow
-WARNING: Skipping pillow as it is not installed.
-(blogenv) 
-Elitebook@DESKTOP-PFSQFAA MINGW32 ~/OneDrive/Desktop/Django course/BackEnd/learning_django
-$ pip install pillow
-Collecting pillow
-  Using cached Pillow-10.0.0.tar.gz (50.5 MB)
-  Installing build dependencies ... done
-  Getting requirements to build wheel ... done
-  Preparing metadata (pyproject.toml) ... done
-Building wheels for collected packages: pillow
-  Building wheel for pillow (pyproject.toml) ... error
-  error: subprocess-exited-with-error
-  
-  × Building wheel for pillow (pyproject.toml) did not run successfully.
-  │ exit code: 1
-  ╰─> [205 lines of output]
-      running bdist_wheel
-      running build
-      running build_py
-      creating build
-      creating build\lib.win32-cpython-311
-      creating build\lib.win32-cpython-311\PIL
-      copying src\PIL\BdfFontFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\BlpImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\BmpImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\BufrStubImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ContainerIO.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\CurImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\DcxImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\DdsImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\EpsImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ExifTags.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\features.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\FitsImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\FliImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\FontFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\FpxImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\FtexImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GbrImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GdImageFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GifImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GimpGradientFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GimpPaletteFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\GribStubImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\Hdf5StubImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\IcnsImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\IcoImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\Image.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageChops.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageCms.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageColor.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageDraw.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageDraw2.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageEnhance.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageFilter.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageFont.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageGrab.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageMath.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageMode.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageMorph.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageOps.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImagePalette.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImagePath.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageQt.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageSequence.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageShow.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageStat.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageTk.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageTransform.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImageWin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\ImtImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\IptcImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\Jpeg2KImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\JpegImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\JpegPresets.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\McIdasImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\MicImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\MpegImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\MpoImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\MspImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PaletteFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PalmImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PcdImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PcfFontFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PcxImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PdfImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PdfParser.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PixarImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PngImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PpmImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PsdImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PSDraw.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\PyAccess.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\QoiImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\SgiImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\SpiderImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\SunImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\TarIO.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\TgaImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\TiffImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\TiffTags.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\WalImageFile.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\WebPImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\WmfImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\XbmImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\XpmImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\XVThumbImagePlugin.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\_binary.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\_deprecate.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\_tkinter_finder.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\_util.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\_version.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\__init__.py -> build\lib.win32-cpython-311\PIL
-      copying src\PIL\__main__.py -> build\lib.win32-cpython-311\PIL
-      running egg_info
-      writing src\Pillow.egg-info\PKG-INFO
-      writing dependency_links to src\Pillow.egg-info\dependency_links.txt
-      writing requirements to src\Pillow.egg-info\requires.txt
-      writing top-level names to src\Pillow.egg-info\top_level.txt
-      reading manifest file 'src\Pillow.egg-info\SOURCES.txt'
-      reading manifest template 'MANIFEST.in'
-      warning: no files found matching '*.c'
-      warning: no files found matching '*.h'
-      warning: no files found matching '*.sh'
-      warning: no files found matching '*.txt'
-      warning: no previously-included files found matching '.appveyor.yml'
-      warning: no previously-included files found matching '.clang-format'
-      warning: no previously-included files found matching '.coveragerc'
-      warning: no previously-included files found matching '.editorconfig'
-      warning: no previously-included files found matching '.readthedocs.yml'
-      warning: no previously-included files found matching 'codecov.yml'
-      warning: no previously-included files found matching 'renovate.json'
-      warning: no previously-included files matching '.git*' found anywhere in distribution
-      warning: no previously-included files matching '*.so' found anywhere in distribution
-      no previously-included directories found matching '.ci'
-      adding license file 'LICENSE'
-      writing manifest file 'src\Pillow.egg-info\SOURCES.txt'
-      running build_ext
-     
-     
-      The headers or library files could not be found for zlib,
-      a required dependency when compiling Pillow from source.
-     
-      Please see the install instructions at:
-         https://pillow.readthedocs.io/en/latest/installation.html
-     
-      Traceback (most recent call last):
-        File "<string>", line 988, in <module>
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\__init__.py", line 103, in setup
-          return distutils.core.setup(**attrs)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\_distutils\core.py", line 185, in setup       
-          return run_commands(dist)
-                 ^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\_distutils\core.py", line 201, in run_commands          dist.run_commands()
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 969, in run_commands          self.run_command(cmd)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\dist.py", line 1001, in run_command
-          super().run_command(command)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 988, in run_command 
-          cmd_obj.run()
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\wheel\bdist_wheel.py", line 364, in run
-          self.run_command("build")
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\_distutils\cmd.py", line 318, in run_command
-          self.distribution.run_command(command)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\dist.py", line 1001, in run_command
-          super().run_command(command)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 988, in run_command 
-          cmd_obj.run()
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\_distutils\command\build.py", line 131, in run          self.run_command(cmd_name)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\_distutils\cmd.py", line 318, in run_command  
-          self.distribution.run_command(command)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\dist.py", line 1001, in run_command
-          super().run_command(command)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 988, in run_command 
-          cmd_obj.run()
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\command\build_ext.py", line 88, in run        
-          _build_ext.run(self)
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\_distutils\command\build_ext.py", line 345, in run
-          self.build_extensions()
-        File "<string>", line 811, in build_extensions
-      RequiredDependencyException: zlib
-     
-      During handling of the above exception, another exception occurred:
-     
-      Traceback (most recent call last):
-        File "C:\Users\Elitebook\OneDrive\Desktop\Django course\BackEnd\learning_django\blogenv\Lib\site-packages\pip\_vendor\pep517\in_process\_in_process.py", line 351, in <module>
-          main()
-        File "C:\Users\Elitebook\OneDrive\Desktop\Django course\BackEnd\learning_django\blogenv\Lib\site-packages\pip\_vendor\pep517\in_process\_in_process.py", line 333, in main
-          json_out['return_val'] = hook(**hook_input['kwargs'])
-                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\OneDrive\Desktop\Django course\BackEnd\learning_django\blogenv\Lib\site-packages\pip\_vendor\pep517\in_process\_in_process.py", line 249, in build_wheel
-          return _build_backend().build_wheel(wheel_directory, config_settings,
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-install-4e7n80bz\pillow_898339695cf143aa99aa0c410461ba30\_custom_build\backend.py", line 53, in build_wheel
-          return super().build_wheel(wheel_directory, config_settings, metadata_directory)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\build_meta.py", line 434, in build_wheel      
-          return self._build_with_temp_dir(
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\build_meta.py", line 419, in _build_with_temp_dir
-          self.run_setup()
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-install-4e7n80bz\pillow_898339695cf143aa99aa0c410461ba30\_custom_build\backend.py", line 47, in run_setup
-          return super().run_setup(setup_script)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Users\Elitebook\AppData\Local\Temp\pip-build-env-ecmhwep5\overlay\Lib\site-packages\setuptools\build_meta.py", line 341, in run_setup        
-          exec(code, locals())
-        File "<string>", line 1005, in <module>
-      RequiredDependencyException:
-     
-      The headers or library files could not be found for zlib,
-      a required dependency when compiling Pillow from source.
-     
-      Please see the install instructions at:
-         https://pillow.readthedocs.io/en/latest/installation.html
-     
-     
-      [end of output]
-
-  note: This error originates from a subprocess, and is likely not a problem with pip.
-  ERROR: Failed building wheel for pillow
-Failed to build pillow
-ERROR: Could not build wheels for pillow, which is required to install pyproject.toml-based projects
-
-[notice] A new release of pip available: 22.3.1 -> 23.2.1
-[notice] To update, run: python.exe -m pip install --upgrade pip
-(blogenv)
-Elitebook@DESKTOP-PFSQFAA MINGW32 ~/OneDrive/Desktop/Django course/BackEnd/learning_django
-$
-'''
-
-
