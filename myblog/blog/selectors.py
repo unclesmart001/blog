@@ -26,7 +26,9 @@ def get_categories(filter=None):
         return categories
     
     if filter and isinstance(filter, dict):
-        Category.objects.filter(**filter)
+       return Category.objects.filter(**filter)
+    
+    raise Exception("Filter must be a dictionary")
 
 def get_specific_category(id:int) -> Category: 
     '''
@@ -35,9 +37,13 @@ def get_specific_category(id:int) -> Category:
     category = Category.objects.get(pk=id)
     return category
      
-def get_blog():
-    all_blogs = Blog.objects.all()
-    return all_blogs
+def get_blog(filter = none):
+  if not filter:
+    return Blog.objects.all()
+  
+  if filter and isinstance(filter, dict):
+    return Blog.objects.filter(**filter)
+  raise Exception("Filter must be a dictionary")
 
 def get_specific_blog(id:int):
     sp_blogs = Blog.objects.get(pk=id)
@@ -55,6 +61,7 @@ def get_user_comments(user_id:int):
         sender__id=user_id
     )
     return sp_comments
+<<<<<<< HEAD
     
 '''
 creating Read queries in django
@@ -172,3 +179,5 @@ Building wheels for collected packages: pillow
          https://pillow.readthedocs.io/en/latest/installation.html
 
 '''
+=======
+>>>>>>> 7fccdb49513cc77352091ef471c14db386040c96
