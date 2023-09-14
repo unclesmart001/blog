@@ -11,6 +11,9 @@ class Category(models.Model):
     image = models.ImageField(upload_to="categories/images", null=True)
     description = models.TextField()
 
+    class Meta:
+        verbose_name_plural= "categories"
+
     def __str__(self) -> str:
         return self.name
 
@@ -35,4 +38,5 @@ class Comment(models.Model):
      
      class Meta:
          ordering = ('-created_at',)
+         
 
