@@ -5,17 +5,28 @@
 
 {% block content %}
 <div class="container">
+    <div class="row justify-content-end">
+        <div class="col-sm-8 col-md-3 col-lg-4">
+            {% if message%}
+            <div class="alert alert-warning">
+                <p class="fon-weight-bold">
+                    {{ message }}
+            </div>
+        </div>
+    </div>
+            {%endif%}
     <div class="row justify-content-center align-items-center">
         <div class="col-sm-12 col-md-9 col-lg-8">
             <p class="h2 text-center my-3 " >Login</p>
-            <form action="{% url 'authenicate:login' %}" method="post" class="mt-2">
+            <form action="{% url 'authenticate:user_login' %}" method="POST" class="mt-2">
+                {% csrf_token %}
                 <label for="username">Username<span class="text-danger">*</span></label>
-                <input name="username type="text class="form-control" required>
+                <input id="uname" name="username" type="text" class="form-control" required>
 
                 <label for="password">Password<span class="text-danger" mt-2>*</span></label>
-                <input name="password type="text class="form-control" required>
+                <input id="pword" name="password" type="password" class="form-control" required>
 
-                <button class="btn btn-primary d-block w-100 my-3">Login</button>
+                <button type="submit" class="btn btn-primary d-block w-100 my-3">Login</button>
             </form>
             {% comment %} #TODO: Create Username and Password validation methods using justify
                 #->Ensure that the password has 8 or more xters

@@ -10,7 +10,9 @@
           <a href ="{% url 'writers:login'%}">login</a>
           
           <img src="{% static 'images/images2.jpg' %}">
-          <h1> Home to {{name}}</h1>
+          {% if request.user and request.user.is_authenticated%}
+          <h1>Hello{{request.user.username}}</h1>
+          {% endif %}
           <p>
               <h2>{{names_list}}</h2>
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab minus praesentium magnam, illo perspiciatis veritatis facilis itaque aliquam

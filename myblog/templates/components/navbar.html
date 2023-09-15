@@ -22,8 +22,12 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'authenticate:signup' %}" style="text-align: right;">Sign up</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'authenticate:login' %}" style="text-align: right;" >Login</a>
+          <li class="nav-item p-2">
+          {% if request.user and request.user.is_authenticated %}
+            <a class="btn btn-success"  href="#">Logout</a>
+            {% else %}
+            <a class="btn btn-success" href={% url 'authenticate:user_login'%}> Login</a>
+            {% endif %}
           </li>
           <li>
           <form class="d-flex">
