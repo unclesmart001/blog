@@ -15,6 +15,7 @@ Eg: django-admin startproject 'Blog'
 
 NB: This works after you have activated your envt.
 
+source "PATH TO ACTIVATE: E.G. blogenv/Scripts/activate
 
 #TODO: 
 1. Create .env, a variable DJANGO_SECRET_KEY, load the secret key variable from  settings.py, dont forget to install dotenv in your evnt
